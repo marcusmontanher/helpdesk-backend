@@ -25,6 +25,7 @@ public class TecnicoDTO implements Serializable{
 
 	public TecnicoDTO() {
 		super();
+		addPerfil(Perfil.CLIENTE);
 	}
 
 	public TecnicoDTO(Tecnico obj) {
@@ -94,6 +95,8 @@ public class TecnicoDTO implements Serializable{
 		this.dataCriacao = dataCriacao;
 	}
 	
-	
+	public void addPerfil(Perfil perfil) {
+		this.perfis.add(perfil.getCodigo());
+	}
 
 }
