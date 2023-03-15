@@ -1,6 +1,7 @@
 package com.marcusmontanher.helpdesk.resources.exceptions;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +56,21 @@ public class ResourceExceptionHandler {
 		for (FieldError x : ex.getBindingResult().getFieldErrors()) {
 			errors.addError(x.getField(), x.getDefaultMessage());
 		}
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		
+	}
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<StandardError> validationErrors(ConstraintViolationException ex, HttpServletRequest request) {
+		
+		ValidationError errors = new ValidationError(System.currentTimeMillis(), 
+				HttpStatus.BAD_REQUEST.value(), 
+				"Validation error", 
+				"Erro na validação dos campos", 
+				request.getRequestURI());
+				
+		errors.addError("cpf", ex.getMessage());
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 		
